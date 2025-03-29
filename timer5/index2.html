@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Countdown Timer</title>
+    <meta name="viewport" content="width=375, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, sans-serif;
+        }
+
+        body {
+            width: 375px;
+            height: 812px;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center bottom;
+            position: absolute;
+            z-index: 0;
+        }
+
+        .timer-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 130px 20px 0; /* Смещение сверху на 130px */
+        }
+
+        .timer-block {
+            position: absolute;
+            text-align: center;
+        }
+
+        /* Расположение блоков */
+        #days-block {
+            bottom: 720px;
+            right: 159px;
+        }
+
+        #hours-block {
+        bottom: 619px;
+        right: 292px;
+        }
+
+        #minutes-block {
+            bottom: 513px;
+            right: 199px;
+        }
+
+        #seconds-block {
+            bottom: 530px;
+            right: 42px;
+        }
+
+        .timer-number {
+            color: #4a4a4a;
+            font-size: 32px; /* Увеличенный размер */
+            font-weight: bold;
+            line-height: 1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .timer-label {
+            color: #4a4a4a;
+            color: rgba(102, 102, 102, 0.9);
+            font-size: 16px;
+            margin-top: 8px;
+            text-transform: uppercase;
+        }
+
+        .tg-button {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            background: transparent;
+            color: #ffffff;
+            padding: 12px 30px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 400;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <img src="photo/Group8.png" 
+         class="background-image" 
+         alt="Background">
+
+    <div class="timer-container">
+        <div class="timer-block" id="days-block">
+            <span class="timer-number" id="days">00</span>
+            <span class="timer-label">d</span>
+        </div>
+
+        <div class="timer-block" id="hours-block">
+            <span class="timer-number" id="hours">00</span>
+            <span class="timer-label">H</span>
+        </div>
+
+        <div class="timer-block" id="minutes-block">
+            <span class="timer-number" id="minutes">00</span>
+            <span class="timer-label">M</span>
+        </div>
+
+        <div class="timer-block" id="seconds-block">
+            <span class="timer-number" id="seconds">00</span>
+            <span class="timer-label">S</span>
+        </div>
+    </div>
+
+    <a href="https://t.me/OWCAchannel" 
+       class="tg-button" 
+       id="tgButton"
+       target="_blank">Join Channel</a>
+
+    <script>
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.expand();
+            tg.MainButton.hide();
+        }
+
+        const targetDate = new Date('2025-04-02T02:00:00').getTime();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById('tgButton').style.display = 'block';
+                document.querySelector('.timer-container').style.opacity = '0';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        let timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
+
+        document.getElementById('tgButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            tg?.openLink(this.href) || window.open(this.href, '_blank');
+        });
+    </script>
+</body>
+</html>
