@@ -26,6 +26,8 @@ function updateTimer() {
 
 const interval = setInterval(updateTimer, 1000);
 updateTimer();
+<link rel="stylesheet" href="style.css?v=1">
+<script src="app.js?v=1"></script>
 
 // Обработка ссылки через Telegram API
 document.querySelector('.tg-button').addEventListener('click', (e) => {
