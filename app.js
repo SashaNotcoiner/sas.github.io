@@ -1,61 +1,68 @@
-// Замените содержимое firebase.js
-const firebaseConfig = {
-  apiKey: "AIzaSyBk...",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-bucket.appspot.com",
-  messagingSenderId: "1234567890",
-  appId: "1:1234567890:web:abcde..."
-};
+// Инициализация Telegram WebApp
+const tg = window.Telegram.WebApp;
+tg.expand();
 
-// Инициализация Firebase с проверкой
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+// Таймер обратного отсчета
+function updateTimer() {
+    const targetDate = new Date('2025-04-03T12:00:00').getTime();
+    const now = new Date().getTime();
+    const diff = targetDate - now;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('countdown').innerHTML = `
+        <div class="timer-block">${days}<span>дней</span></div>
+        <div class="timer-block">${hours}<span>часов</span></div>
+        <div class="timer-block">${minutes}<span>минут</span></div>
+        <div class="timer-block">${seconds}<span>секунд</span></div>
+    `;
 }
 
-const db = firebase.firestore();
-
-// Функция для обработки рефералов
-async function handleReferral(referrerId, userId) {
-  try {
-    const userRef = db.collection('users').doc(referrerId);
-    const doc = await userRef.get();
-
-    if (!doc.exists) {
-      await userRef.set({
-        referrals: 1,
-        created: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    } else {
-      await userRef.update({
-        referrals: firebase.firestore.FieldValue.increment(1)
-      });
-    }
-  } catch (error) {
-    console.error('Referral error:', error);
-  }
+// Навигация
+function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`${page}-page`).classList.add('active');
 }
 
-// Обновленная функция initReferrals
+// Реферальная система
 function initReferrals() {
-  const tg = window.Telegram.WebApp;
-  const userId = tg.initDataUnsafe.user?.id;
-  const referrerId = tg.initDataUnsafe.start_param;
+    const userId = tg.initDataUnsafe.user?.id;
+const referrerId = tg.initDataUnsafe.start_param;
+    
+    // Обновляем счетчик реферера
+    if(referrerId && referrerId !== userId) {
+        db.collection('users').doc(referrerId).update({
+            referrals: firebase.firestore.FieldValue.increment(1)
+        });
+    }
 
-  if (userId && referrerId && referrerId !== userId) {
-    handleReferral(referrerId, userId);
-  }
+    // Генерация ссылки
+    const referralLink = `https://t.me/${tg.initDataUnsafe.user?.username}?start=${userId}`;
+    document.getElementById('referral-link').value = referralLink;
 
-  // Генерация реферальной ссылки
-  const referralLink = `https://t.me/${tg.initDataUnsafe.user?.username}?start=${userId}`;
-  document.getElementById('referral-link').value = referralLink;
-
-  // Отслеживание изменений
-  db.collection('users').doc(userId).onSnapshot((doc) => {
-    const data = doc.data();
-    document.getElementById('referral-count').textContent = data?.referrals || 0;
-  }, (error) => {
-    console.error('Snapshot error:', error);
-  });
+    // Слушатель изменений
+    db.collection('users').doc(userId).onSnapshot(doc => {
+        document.getElementById('referral-count').textContent = doc.data()?.referrals || 0;
+    });
 }
+
+// Инициализация
+document.addEventListener('DOMContentLoaded', () => {
+    // Запускаем таймер
+    setInterval(updateTimer, 1000);
+    
+    // Инициализируем реферальную систему
+    if(tg.initDataUnsafe.user) {
+        db.collection('users').doc(tg.initDataUnsafe.user.id).set({
+            referrals: 0,
+            created: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        
+        initReferrals();
+    }
+});
+
 
