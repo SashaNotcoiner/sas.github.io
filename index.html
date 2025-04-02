@@ -1,5 +1,29 @@
+хихихихи, [02.04.2025 20:46]
 <!DOCTYPE html>
 <html>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBIFm4jA6tqREDCNn88YtgXBZAqYuy0f48",
+    authDomain: "yaneymeuprogramirifat.firebaseapp.com",
+    projectId: "yaneymeuprogramirifat",
+    storageBucket: "yaneymeuprogramirifat.firebasestorage.app",
+    messagingSenderId: "640330324479",
+    appId: "1:640330324479:web:1b3c8427ead8b861592fca",
+    measurementId: "G-Y4SEKK05B1"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 <head>
     <meta charset="UTF-8">
     <title>Telegram Countdown App</title>
@@ -54,6 +78,13 @@
             width: 80%;
         }
 
+        .referral-container h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
         .copy-container {
             display: flex;
             align-items: center;
@@ -73,26 +104,32 @@
         }
 
         .copy-btn {
-            background: transparent;
+            background: #1111;
             border: none;
             width: 50px;
             height: 50px;
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .copy-btn:hover {
+            background: #1111;
             transform: scale(1.05);
         }
 
         .copy-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Заполняем весь контейнер */
+    filter: none !important; /* Убираем инвертирование цветов */
+    transition: transform 0.3s; }
+    .copy-btn:hover img {
+    transform: scale(1.05); /* Анимация при наведении */
+}
         .referral-container p {
             color: white !important;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
@@ -110,7 +147,8 @@
             z-index: 2;
         }
 
-        .nav-btn {
+хихихихи, [02.04.2025 20:46]
+.nav-btn {
             width: 240px;
             height: 118px;
             border: none;
@@ -125,102 +163,102 @@
         }
 
         @media (max-width: 768px) {
-            #countdown {
-                font-size: 3em;
-                gap: 15px;
-            }
-            
-            .nav-btn {
-                width: 120px;
-                height: 59px;
+            .page, .page-image, #countdown, .referral-container, .bottom-nav {
+                transform: none !important;
+                left: 0 !important;
+                width: 100% !important;
             }
         }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+
 </head>
 <body>
     <!-- Страница таймера -->
     <div id="time-page" class="page active">
-        <img src="./images/Group 37.png" class="page-image">
+        <img src="Group 37.png" class="page-image">
         <div id="countdown">Загрузка...</div>
         <nav class="bottom-nav">
             <button class="nav-btn active" onclick="showPage('referral')">
-                <img src="./images/Group 32.png" alt="Рефералы">
+                <img src="Group 32.png" alt="Рефералы">
             </button>
             <button class="nav-btn" onclick="showPage('time')">
-                <img src="./images/Group 23.png" alt="Время">
+                <img src="Group 23.png" alt="Время">
             </button>
             <button class="nav-btn" onclick="showPage('quests')">
-                <img src="./images/Group 33.png" alt="Квесты">
+                <img src="Group 33.png" alt="Квесты">
             </button>
         </nav>
     </div>
 
     <!-- Реферальная страница -->
     <div id="referral-page" class="page">
-        <img src="./images/Group 36.png" class="page-image">
+        <img src="Group 36.png" class="page-image">
         <div class="referral-container">
+            <h2></h2>
             <div class="copy-container">
                 <input type="text" id="referral-link" readonly>
                 <button class="copy-btn" onclick="copyToClipboard()">
-                    <img src="./images/photo_2025-04-01_19-11-07.jpg" alt="Копировать">
+                    <img src="photo_2025-04-01_19-11-07.jpg" alt="Копировать"> <!-- Ваша фотография -->
                 </button>
             </div>
             <p>Приглашено: <span id="referral-count">0</span></p>
         </div>
         <nav class="bottom-nav">
             <button class="nav-btn" onclick="showPage('referral')">
-                <img src="./images/Group 26.png" alt="Рефералы">
+                <img src="Group 26.png" alt="Рефералы">
             </button>
             <button class="nav-btn active" onclick="showPage('time')">
-                <img src="./images/Group 13.png" alt="Время">
+                <img src="Group 13.png" alt="Время">
             </button>
             <button class="nav-btn" onclick="showPage('quests')">
-                <img src="./images/Group 33.png" alt="Квесты">
+                <img src="Group 33.png" alt="Квесты">
+            </button>
+        </nav>
+    </div>
+
+    <!-- Страница квестов -->
+    <div id="quests-page" class="page">
+        <img src="Group 35.png" class="page-image">
+        <div class="container"></div>
+        <nav class="bottom-nav">
+            <button class="nav-btn" onclick="showPage('referral')">
+                <img src="Group 32.png" alt="Рефералы">
+            </button>
+            <button class="nav-btn" onclick="showPage('time')">
+                <img src="Group 13.png" alt="Время">
+            </button>
+            <button class="nav-btn active" onclick="showPage('quests')">
+                <img src="Group 27.png" alt="Квесты">
             </button>
         </nav>
     </div>
 
     <script>
-        // Конфигурация Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyBIFm4jA6tqREDCNn88YtgXBZAqYuy0f48",
-            authDomain: "yaneymeuprogramirifat.firebaseapp.com",
-            projectId: "yaneymeuprogramirifat",
-            storageBucket: "yaneymeuprogramirifat.appspot.com",
-            messagingSenderId: "640330324479",
-            appId: "1:640330324479:web:1b3c8427ead8b861592fca"
-        };
-
-        // Инициализация Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Навигация между страницами
         function showPage(page) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(`${page}-page`).classList.add('active');
-            
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
                 const img = btn.querySelector('img');
                 img.src = img.src.replace('_active', '_inactive');
             });
 
-            const activeBtns = document.querySelectorAll(`[onclick="showPage('${page}')"]`);
-            activeBtns.forEach(btn => {
+            document.querySelectorAll([onclick="showPage('${page}')"]).forEach(btn => {
                 btn.classList.add('active');
                 const img = btn.querySelector('img');
                 img.src = img.src.replace('_inactive', '_active');
             });
+
+хихихихи, [02.04.2025 20:46]
+document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(${page}-page).classList.add('active');
         }
 
-        // Таймер обратного отсчета
         function updateTimer() {
             const targetDate = new Date('2025-04-03T12:00:00').getTime();
             const now = new Date().getTime();
@@ -239,79 +277,47 @@
             `;
         }
 
-        // Реферальная система
-        async function initReferrals() {
-            try {
-                const userId = tg.initDataUnsafe.user?.id;
-                const referrerId = tg.initDataUnsafe.start_param;
-                
-                if (!userId) throw new Error('User ID not found');
+        function copyToClipboard() {
+            const link = document.getElementById('referral-link');
+            link.select();
+            document.execCommand('copy');
+            
+            const btn = document.querySelector('.copy-btn');
+            btn.style.background = '#28a745';
+            setTimeout(() => {
+                btn.style.background = '#007bff';
+            }, 1000);
+        }
 
-                // Создание записи пользователя
-                const userRef = db.collection('users').doc(userId.toString());
-                await userRef.set({
-                    id: userId,
-                    username: tg.initDataUnsafe.user?.username || 'user',
-                    referrals: 0,
-                    created: firebase.firestore.FieldValue.serverTimestamp(),
-                    referrer: referrerId || null
-                }, { merge: true });
-
-                // Обновление реферера
-                if (referrerId && referrerId !== userId.toString()) {
-                    const referrerRef = db.collection('users').doc(referrerId);
-                    await db.runTransaction(async (transaction) => {
-                        const doc = await transaction.get(referrerRef);
-                        const newCount = (doc.data()?.referrals || 0) + 1;
-                        transaction.update(referrerRef, {
-                            referrals: newCount,
-                            referredUsers: firebase.firestore.FieldValue.arrayUnion(userId)
-                        });
-                    });
-                }
-
-                // Генерация реферальной ссылки
-                const referralLink = `https://t.me/${encodeURIComponent(tg.initDataUnsafe.user?.username || 'your_bot')}?start=${encodeURIComponent(userId)}`;
-                document.getElementById('referral-link').value = referralLink;
-
-                // Обновление счетчика в реальном времени
-                userRef.onSnapshot((doc) => {
-                    const countElement = document.getElementById('referral-count');
-                    if (countElement && doc.exists) {
-                        countElement.textContent = doc.data()?.referrals || 0;
-                    }
+        function initReferrals() {
+            const userId = tg.initDataUnsafe.user?.id;
+            const referrerId = tg.initDataUnsafe.start_param;
+            
+            if(referrerId && referrerId !== userId) {
+                db.collection('users').doc(referrerId).update({
+                    referrals: firebase.firestore.FieldValue.increment(1)
                 });
-
-            } catch (error) {
-                console.error('Ошибка реферальной системы:', error);
             }
+
+            const referralLink = `https://t.me/${tg.initDataUnsafe.user?.username}?start=${userId}`;
+            document.getElementById('referral-link').value = referralLink;
+
+            db.collection('users').doc(userId).onSnapshot(doc => {
+                document.getElementById('referral-count').textContent = doc.data()?.referrals || 0;
+            });
         }
 
-        // Копирование ссылки
-        async function copyToClipboard() {
-            try {
-                const link = document.getElementById('referral-link').value;
-                await navigator.clipboard.writeText(link);
-                
-                const btn = document.querySelector('.copy-btn');
-                if (btn) {
-                    btn.style.transform = 'scale(0.95)';
-                    setTimeout(() => btn.style.transform = 'scale(1)', 200);
-                }
-            } catch (err) {
-                console.error('Ошибка копирования:', err);
-            }
-        }
-
-        // Инициализация приложения
         document.addEventListener('DOMContentLoaded', () => {
-            if (!tg.initDataUnsafe?.user) {
-                console.error('Данные пользователя недоступны');
-                return;
-            }
-
             setInterval(updateTimer, 1000);
-            initReferrals();
+            
+            if(tg.initDataUnsafe.user) {
+                db.collection('users').doc(tg.initDataUnsafe.user.id).set({
+                    referrals: 0,
+                    created: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                
+                initReferrals();
+            }
         });
     </script>
 </body>
