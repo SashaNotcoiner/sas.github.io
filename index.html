@@ -1,5 +1,89 @@
 <!DOCTYPE html>
 <html>
+    <html>
+<head>
+    <!-- Остальные метатеги и стили остаются без изменений -->
+    <style>
+        /* Добавляем новые стили для загрузочного экрана */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s;
+        }
+
+        .splash-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        /* Модифицируем существующие стили */
+        .page {
+            display: none;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Добавляем загрузочный экран -->
+    <div class="splash-screen" id="splashScreen">
+        <img src="50" class="splash-image" alt="Загрузка...">
+    </div>
+
+    <!-- Остальная часть кода остается без изменений -->
+    <div id="time-page" class="page active">
+        <!-- ... существующее содержимое ... -->
+    </div>
+
+    <script>
+        // Модифицируем существующий скрипт
+        document.addEventListener('DOMContentLoaded', () => {
+            // Показываем загрузочный экран сразу
+            const splashScreen = document.getElementById('splashScreen');
+            
+            // Запускаем таймер
+            setInterval(updateTimer, 1000);
+            
+            // Инициализация Firebase и пользователя
+            if(tg.initDataUnsafe.user) {
+                db.collection('users').doc(tg.initDataUnsafe.user.id).set({
+                    referrals: 0,
+                    created: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                
+                initReferrals();
+            }
+
+            // Скрываем загрузочный экран когда все готово
+            setTimeout(() => {
+                splashScreen.style.opacity = '0';
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                    document.querySelector('.page.active').style.opacity = '1';
+                }, 500);
+            }, 2000); // Задержка для демонстрации, можно уменьшить
+        });
+
+        // Остальные функции остаются без изменений
+    </script>
+</body>
 <head>
     <meta charset="UTF-8">
     <title>Telegram Countdown App</title>
